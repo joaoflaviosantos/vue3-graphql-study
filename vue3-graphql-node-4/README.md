@@ -2,9 +2,9 @@
 
 ### Playlist Course Link - [Course link](https://www.youtube.com/playlist?list=PLQCmSnNFVYnTiC-pPY0SySbf-ZNGBwnaG)
 
-#### 1 - Video Link - [Course link](https://www.youtube.com/watch?v=TSX_hMfL13U&list=PLQCmSnNFVYnTiC-pPY0SySbf-ZNGBwnaG)
+#### 4 - Video Link - [Course link](https://www.youtube.com/watch?v=rOsd2QNWmgw&list=PLQCmSnNFVYnTiC-pPY0SySbf-ZNGBwnaG)
 
-# vue3-graphql-node-1
+# vue3-graphql-node-4
 
 This template should help get you started developing with Vue 3 in Vite.
 

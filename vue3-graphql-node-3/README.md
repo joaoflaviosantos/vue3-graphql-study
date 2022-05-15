@@ -2,7 +2,7 @@
 
 ### Playlist Course Link - [Course link](https://www.youtube.com/playlist?list=PLQCmSnNFVYnTiC-pPY0SySbf-ZNGBwnaG)
 
-#### #3 - Video Link - [Course link](https://www.youtube.com/watch?v=03__uYg3mWs&list=PLQCmSnNFVYnTiC-pPY0SySbf-ZNGBwnaG)
+#### 3 - Video Link - [Course link](https://www.youtube.com/watch?v=03__uYg3mWs&list=PLQCmSnNFVYnTiC-pPY0SySbf-ZNGBwnaG)
 
 # vue3-graphql-node-3
 
