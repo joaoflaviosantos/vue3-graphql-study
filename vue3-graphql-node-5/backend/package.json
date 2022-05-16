@@ -1,0 +1,15 @@
+{
+  "name": "namegator-server",
+  "version": "1.0.0",
+  "description": "GraphQL Node Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.7.0",
+    "graphql": "^16.5.0"
+  }
+}
