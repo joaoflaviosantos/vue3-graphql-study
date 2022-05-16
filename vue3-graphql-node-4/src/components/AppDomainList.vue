@@ -3,17 +3,19 @@
     <div id="main">
       <div class="container">
         <div class="row">
-          <div class="col-md my-3">
+          <div class="col-md my-1">
             <AppItemList
               title="Prefixes"
+              :singularItem="singularPrefixes"
               :items="prefixes"
               @addItem="addPrefix"
               @deleteItem="deletePrefix"
             />
           </div>
-          <div class="col-md my-3">
+          <div class="col-md my-1">
             <AppItemList
               title="Suffixes"
+              :singularItem="singularSuffixes"
               :items="suffixes"
               @addItem="addSuffix"
               @deleteItem="deleteSuffix"
@@ -21,40 +23,42 @@
           </div>
         </div>
         <br />
-        <h5>
-          Domains <span class="badge bg-info">{{ domains.length }}</span>
-        </h5>
-        <div class="card">
-          <div class="card-body">
-            <ul class="list-group" v-if="domains.length == 0">
-              <li class="list-group-item list-group-item-danger">
-                Please enter at least one prefix and a suffix to view the
-                suggestions for domain names
-              </li>
-            </ul>
-            <ul class="list-group">
-              <li
-                class="list-group-item"
-                v-for="(domain, index) in domains"
-                :key="index"
-              >
-                <div class="row">
-                  <div class="col-md">
-                    {{ domain.name }}
+        <div>
+          <h5>
+            Domains <span class="badge bg-info">{{ domains.length }}</span>
+          </h5>
+          <div class="card" style="min-height: 18rem">
+            <div class="card-body">
+              <ul class="list-group" v-if="domains.length == 0">
+                <li class="list-group-item list-group-item-danger">
+                  Please enter at least one prefix and a suffix to view the
+                  suggestions for domain names
+                </li>
+              </ul>
+              <ul class="list-group">
+                <li
+                  class="list-group-item"
+                  v-for="(domain, index) in domains"
+                  :key="index"
+                >
+                  <div class="row">
+                    <div class="col-md">
+                      {{ domain.name }}
+                    </div>
+                    <!-- https://stackoverflow.com/a/67257313/15876118 -->
+                    <div class="col-md float-end text-end">
+                      <a
+                        class="btn btn-success btn-sm opacity-75"
+                        :href="domain.checkout"
+                        target="_blank"
+                      >
+                        <span class="text-white fa fa-shopping-cart"></span>
+                      </a>
+                    </div>
                   </div>
-                  <!-- https://stackoverflow.com/a/67257313/15876118 -->
-                  <div class="col-md float-end text-end">
-                    <a
-                      class="btn btn-success btn-sm opacity-75"
-                      :href="domain.checkout"
-                      target="_blank"
-                    >
-                      <span class="text-white fa fa-shopping-cart"></span>
-                    </a>
-                  </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -68,7 +72,9 @@ import AppItemList from "./AppItemList.vue";
 
 // reactive state
 const prefixes = ref(["Air", "Jet", "Flight"]);
+const singularPrefixes = ref("prefix");
 const suffixes = ref(["Hub", "Station", "Mart"]);
+const singularSuffixes = ref("suffix");
 
 // reactive computed state
 const domains = computed(() => {

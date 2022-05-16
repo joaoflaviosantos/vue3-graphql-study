@@ -1,16 +1,16 @@
 <template>
   <div>
-    <nav class="p-3 navbar navbar-expand-lg navbar-dark bg-dark bg-gradient">
+    <nav class="p-2 navbar navbar-expand-lg navbar-dark bg-dark bg-gradient">
       <div class="container-fluid">
         <a class="navbar-brand mb-0 h1" href="#">
           <img
             src="@/assets/logo_hostgator.svg"
             alt=""
-            width="40"
-            height="40"
-            class="d-inline-block"
+            width="50"
+            height="50"
+            class="mx-3 d-inline-block"
           />
-          NameGator
+          <span id="logo-text" class="mx-4">NameGator</span>
         </a>
         <button
           class="navbar-toggler"
@@ -24,7 +24,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav justify-content-end">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
@@ -73,4 +73,8 @@ import ModalLink from "./ModalLink.vue";
 // https://financeiro.hostgator.com.br/api/v2/shop/br/domains/availability/com.br/airstation
 </script>
 
-<style scoped></style>
+<style scoped>
+#logo-text {
+  font-size: 120%;
+}
+</style>

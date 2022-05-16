@@ -1,10 +1,22 @@
 <template>
-  <div>
+  <div class="mt-2">
     <h5>
       {{ title }} <span class="badge bg-info">{{ items.length }}</span>
     </h5>
-    <div class="card">
+    <div class="card" style="min-height: 14rem">
       <div class="card-body">
+        <ul class="list-group" v-if="items.length == 0">
+          <li class="list-group-item list-group-item-danger">
+            <div class="row">
+              <div class="col-md-1">
+                <span class="fa fa-exclamation"></span>
+              </div>
+              <div class="col-md">
+                Please enter at least one {{ singularItem }}
+              </div>
+            </div>
+          </li>
+        </ul>
         <ul class="list-group">
           <li
             class="list-group-item"
@@ -51,7 +63,7 @@
 import { ref } from "vue";
 
 // props
-const props = defineProps(["title", "items"]);
+const props = defineProps(["title", "items", "singularItem"]);
 
 // reactive state
 const item = ref("");
