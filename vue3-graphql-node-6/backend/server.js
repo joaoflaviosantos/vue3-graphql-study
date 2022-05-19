@@ -12,7 +12,6 @@ const typeDefs = `
         items (type: String): [Item]
     }
 
-
     input ItemInput {
         type: String
         description: String
@@ -20,6 +19,7 @@ const typeDefs = `
 
     type Mutation {
         saveItem(item: ItemInput): Item
+        deleteItem(id: Int): Boolean
     }
 
 `;
@@ -33,22 +33,43 @@ const items = [
     {id:6, type: "suffix", description: "Mart"},
 ];
 
+var maxId = Math.max(...items.map(item => item.id))
+
 const resolvers = {
     Query: {
         items(_, args) {
             const dictItems = items.filter(item => item.type === args.type)
             const descriptions = dictItems.map((item) => item.description);
-            console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, query: items, type: ${args.type}, description: ${descriptions}}`)
+            console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, query: items, type: ${args.type}, description: ${descriptions}, status: success}`);
             return dictItems;
         }
     },
     Mutation: {
         saveItem(_, args) {
+            const description = args.item.description;
+            const item = items.find(item => item.description === description);
+            if (item) {
+                console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, mutation: saveItem, type: Not found, description: Not found, status: fail}`);
+            } else {
             const item = args.item;
-            item.id = Math.max(...items.map(item => item.id)) + 1
+            item.id = maxId + 1
             items.push(item);
-            console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, query: items, type: ${args.item.type}, description: ${args.item.description}}`)
+            maxId = maxId + 1
+            console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, mutation: saveItem, type: ${args.item.type}, description: ${args.item.description}, status: success}`);
             return item;
+            };
+        },
+        deleteItem(_, args) {
+            const id = args.id;
+            const item = items.find(item => item.id === id);
+            if (!item) {
+                console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, mutation: deleteItem, type: Not found, description: Not found, status: fail}`);
+                return false;
+            } else {
+                items.splice(items.indexOf(item),1);  
+                console.log(`{datetime: ${(new Date(Date.now())).toISOString()}, mutation: deleteItem, type: ${item.type}, description: ${item.description}, status: success}`);
+                return true;
+            };
         }
     }
 }

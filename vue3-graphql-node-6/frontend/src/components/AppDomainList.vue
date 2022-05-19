@@ -6,19 +6,19 @@
           <div class="col-md my-1">
             <AppItemList
               title="Prefixes"
-              :singularItem="singularPrefixes"
-              :items="prefixes"
-              @addItem="addPrefix"
-              @deleteItem="deletePrefix"
+              type="prefix"
+              :items="items.prefix"
+              @addItem="addItem"
+              @deleteItem="deleteItem"
             />
           </div>
           <div class="col-md my-1">
             <AppItemList
               title="Suffixes"
-              :singularItem="singularSuffixes"
-              :items="suffixes"
-              @addItem="addSuffix"
-              @deleteItem="deleteSuffix"
+              type="suffix"
+              :items="items.suffix"
+              @addItem="addItem"
+              @deleteItem="deleteItem"
             />
           </div>
         </div>
@@ -72,45 +72,118 @@ import AppItemList from "./AppItemList.vue";
 import axios from "axios/dist/axios";
 
 // reactive state
-const prefixes = ref([]);
-const singularPrefixes = ref("prefix");
-const suffixes = ref([]);
-const singularSuffixes = ref("suffix");
+/*
+const prefix = ref([]);
+const suffix = ref([]);
+*/
+const items = {
+  prefix: ref([]),
+  suffix: ref([]),
+};
 
-// requesting initial values from Graphql with Axios
-onMounted(async () => {
+// methods
+const getItems = async (type) => {
   await axios({
     url: "http://localhost:4000",
     method: "post",
     data: {
       query: `
-        {
-          prefixes: items (type: "prefix") {
-            id
-            type
-            description
-          }
-          suffixes: items (type: "suffix") {
+        query ($type: String) {
+          items: items (type: $type) {
             id
             type
             description
           }
         }
       `,
+      variables: {
+        type: type,
+      },
     },
   }).then((response) => {
     const query = response.data;
-    prefixes.value = query.data.prefixes.map((prefix) => prefix.description);
-    suffixes.value = query.data.suffixes.map((suffix) => suffix.description);
+    items[type].value = query.data.items;
   });
-});
+};
+
+const addItem = async (item) => {
+  if (
+    item != null &&
+    item != "" &&
+    !items.prefix.value.find((item) => item.description === item) &&
+    !items.suffix.value.find((item) => item.description === item)
+  ) {
+    try {
+      //await prefix.value.push(iprefix);
+      await axios({
+        url: "http://localhost:4000",
+        method: "post",
+        data: {
+          query: `
+        mutation ($item: ItemInput) {
+          newItem: saveItem(item: $item) {
+            id
+            type
+            description
+          }
+        }
+      `,
+          variables: {
+            item,
+          },
+        },
+      }).then((response) => {
+        const query = response.data;
+        if (query.data.newItem) {
+          items[item.type].value.push(query.data.newItem);
+        }
+      });
+    } catch (error) {
+      alert(error);
+    }
+  }
+};
+
+const deleteItem = async (item) => {
+  if (items[item.type].value.includes(item)) {
+    try {
+      await axios({
+        url: "http://localhost:4000",
+        method: "post",
+        data: {
+          query: `
+              mutation ($id: Int) {
+                  delete: deleteItem(id: $id)
+              }
+          `,
+          variables: {
+            id: item.id,
+          },
+        },
+      }).then((response) => {
+        const query = response.data;
+        if (query.data.delete) {
+          items[item.type].value.splice(
+            items[item.type].value.indexOf(item),
+            1
+          );
+        }
+      });
+    } catch (error) {
+      alert(error);
+    }
+  }
+};
+
+// requesting initial values from Graphql with Axios
+onMounted(getItems("prefix"), getItems("suffix"));
 
 // reactive computed state
 const domains = computed(() => {
   const domainslist = [];
-  for (const p of prefixes.value) {
-    for (const s of suffixes.value) {
-      const name = p + s;
+  for (const p of items.prefix.value) {
+    for (const s of items.suffix.value) {
+      const name = p.description + s.description;
       const checkout = `https://cart.hostgator.com.br/?pid=d&sld=${name.toLocaleLowerCase()}&tld=.com.br`;
       domainslist.push({
         name,
@@ -121,94 +194,6 @@ const domains = computed(() => {
   return domainslist;
 });
 
-// methods
-const addPrefix = async (iprefix) => {
-  if (iprefix != null && iprefix != "" && !prefixes.value.includes(iprefix)) {
-    try {
-      //await prefixes.value.push(iprefix);
-      await axios({
-        url: "http://localhost:4000",
-        method: "post",
-        data: {
-          query: `
-        mutation ($item: ItemInput) {
-          newPrefix: saveItem(item: $item) {
-            id
-            type
-            description
-          }
-        }
-      `,
-          variables: {
-            item: {
-              type: "prefix",
-              description: iprefix,
-            },
-          },
-        },
-      }).then((response) => {
-        const query = response.data;
-        prefixes.value.push(query.data.newPrefix.description);
-      });
-    } catch (error) {
-      alert(error);
-    }
-  }
-};
-
-const deletePrefix = async (iprefix) => {
-  if (prefixes.value.includes(iprefix)) {
-    try {
-      await prefixes.value.splice(prefixes.value.indexOf(iprefix), 1);
-    } catch (error) {
-      alert(error);
-    }
-  }
-};
-
-const addSuffix = async (isuffix) => {
-  if (isuffix != null && isuffix != "" && !suffixes.value.includes(isuffix)) {
-    try {
-      //await suffixes.value.push(isuffix);
-      await axios({
-        url: "http://localhost:4000",
-        method: "post",
-        data: {
-          query: `
-        mutation ($item: ItemInput) {
-          newSuffix: saveItem(item: $item) {
-            id
-            type
-            description
-          }
-        }
-      `,
-          variables: {
-            item: {
-              type: "suffix",
-              description: isuffix,
-            },
-          },
-        },
-      }).then((response) => {
-        const query = response.data;
-        suffixes.value.push(query.data.newSuffix.description);
-      });
-    } catch (error) {
-      alert(error);
-    }
-  }
-};
-
-const deleteSuffix = async (isuffix) => {
-  if (suffixes.value.includes(isuffix)) {
-    try {
-      await suffixes.value.splice(suffixes.value.indexOf(isuffix), 1);
-    } catch (error) {
-      alert(error);
-    }
-  }
-};
 // https://financeiro.hostgator.com.br/api/v2/shop/br/domains/availability/com.br/airstation
 </script>
 
