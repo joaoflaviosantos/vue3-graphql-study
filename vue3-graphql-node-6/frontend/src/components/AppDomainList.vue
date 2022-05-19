@@ -197,4 +197,5 @@ const domains = computed(() => {
 // https://financeiro.hostgator.com.br/api/v2/shop/br/domains/availability/com.br/airstation
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

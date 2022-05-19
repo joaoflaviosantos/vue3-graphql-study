@@ -36,6 +36,7 @@ const items = [
 var maxId = Math.max(...items.map(item => item.id))
 
 const resolvers = {
+
     Query: {
         items(_, args) {
             const dictItems = items.filter(item => item.type === args.type)
@@ -44,6 +45,7 @@ const resolvers = {
             return dictItems;
         }
     },
+    
     Mutation: {
         saveItem(_, args) {
             const description = args.item.description;

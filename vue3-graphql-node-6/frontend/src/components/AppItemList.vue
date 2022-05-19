@@ -100,4 +100,5 @@ const deleteItem = async (i) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
